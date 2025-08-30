@@ -6,6 +6,8 @@ use App\Http\Controllers\OAuth\ChzzkController;
 use App\Http\Controllers\OAuth\YoutubeController;
 use App\Http\Controllers\NaverCommerceController;
 use App\Http\Controllers\ChzzkStreamController;
+use App\Http\Controllers\LiveStreamController;
+use App\Http\Controllers\ChatController;
 
 Route::get('/', function () {
     return view('index');
@@ -25,5 +27,10 @@ Route::get('/oauth/youtube/callback', [YoutubeController::class, 'callback'])->n
 Route::middleware(['auth'])->group(function () {
     Route::get('/chzzk/streams', [ChzzkStreamController::class, 'index']);
     Route::get('/chzzk/streams/{filename}', [ChzzkStreamController::class, 'show']);
+    Route::get('/live/streams', [LiveStreamController::class, 'index']);
+    Route::get('/live/streams/{id}', [LiveStreamController::class, 'show']);
+    Route::get('/chat/user/{id}', [ChatController::class, 'userInfo']);
+    Route::post('/chat/mute/{id}', [ChatController::class, 'mute']);
+    Route::post('/chat/ban/{id}', [ChatController::class, 'ban']);
     Route::get('/naver-commerce', [NaverCommerceController::class, 'dashboard'])->middleware('superadmin');
 });

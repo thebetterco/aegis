@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-<html>
-<body>
+@extends('layouts.app')
+
+@section('content')
 @if(session('status'))
     <p>{{ session('status') }}</p>
 @endif
@@ -16,5 +16,4 @@
 </form>
 <a href="{{ route('oauth.chzzk') }}">Login with Naver Chzzk</a>
 <a href="{{ route('oauth.youtube') }}">Login with YouTube</a>
-</body>
-</html>
+@endsection

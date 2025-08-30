@@ -1,9 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
+@extends('layouts.app')
+
+@section('head')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
+@endsection
+
+@section('content')
 <video id="videoPlayer" controls src="{{ $video }}" width="640"></video>
 <canvas id="timelineChart" width="640" height="40"></canvas>
 <script>
@@ -82,5 +83,4 @@ video.addEventListener('loadedmetadata', () => {
     };
 });
 </script>
-</body>
-</html>
+@endsection

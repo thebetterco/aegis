@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-<html>
-<body>
+@extends('layouts.app')
+
+@section('content')
 @if($errors->any())
     <div>{{ $errors->first() }}</div>
 @endif
@@ -12,5 +12,4 @@
     <label><input type="checkbox" name="accept_email"> Accept emails</label>
     <button type="submit">Register</button>
 </form>
-</body>
-</html>
+@endsection
