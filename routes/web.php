@@ -7,7 +7,8 @@ use App\Http\Controllers\OAuth\YoutubeController;
 use App\Http\Controllers\NaverCommerceController;
 use App\Http\Controllers\ChzzkStreamController;
 use App\Http\Controllers\LiveStreamController;
-use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ChzzkChatController;
+use App\Http\Controllers\YoutubeChatController;
 
 Route::get('/', function () {
     return view('index');
@@ -29,8 +30,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chzzk/streams/{filename}', [ChzzkStreamController::class, 'show']);
     Route::get('/live/streams', [LiveStreamController::class, 'index']);
     Route::get('/live/streams/{id}', [LiveStreamController::class, 'show']);
-    Route::get('/chat/user/{id}', [ChatController::class, 'userInfo']);
-    Route::post('/chat/mute/{id}', [ChatController::class, 'mute']);
-    Route::post('/chat/ban/{id}', [ChatController::class, 'ban']);
+    Route::get('/chzzk/chat/user/{id}', [ChzzkChatController::class, 'userInfo']);
+    Route::post('/chzzk/chat/mute/{id}', [ChzzkChatController::class, 'mute']);
+    Route::post('/chzzk/chat/ban/{id}', [ChzzkChatController::class, 'ban']);
+    Route::get('/youtube/chat/user/{id}', [YoutubeChatController::class, 'userInfo']);
+    Route::post('/youtube/chat/mute/{id}', [YoutubeChatController::class, 'mute']);
+    Route::post('/youtube/chat/ban/{id}', [YoutubeChatController::class, 'ban']);
     Route::get('/naver-commerce', [NaverCommerceController::class, 'dashboard'])->middleware('superadmin');
 });

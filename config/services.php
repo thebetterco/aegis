@@ -12,6 +12,7 @@ return [
         'client_id' => env('YOUTUBE_CLIENT_ID'),
         'client_secret' => env('YOUTUBE_CLIENT_SECRET'),
         'api_key' => env('YOUTUBE_API_KEY'),
+        'api_url' => env('YOUTUBE_API_URL', 'https://www.googleapis.com/youtube/v3'),
     ],
     'naver_commerce' => [
         'client_id' => env('NAVER_COMMERCE_CLIENT_ID'),

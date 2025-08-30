@@ -22,10 +22,11 @@
     <button onclick="document.getElementById('userModal').style.display='none'">Close</button>
 </div>
 <script>
+const platform = "{{ $stream->platform }}";
 document.querySelectorAll('.chat-user').forEach(el => {
     el.addEventListener('click', () => {
         const userId = el.dataset.userId;
-        fetch(`/chat/user/${userId}`)
+        fetch(`/${platform}/chat/user/${userId}`)
             .then(r => r.json())
             .then(data => {
                 document.getElementById('modalContent').innerHTML =
@@ -40,7 +41,7 @@ document.querySelectorAll('.chat-user').forEach(el => {
     });
 });
 function act(type, userId) {
-    fetch(`/chat/${type}/${userId}`, {
+    fetch(`/${platform}/chat/${type}/${userId}`, {
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
     }).then(r => r.json()).then(data => alert(data.status));
