@@ -17,10 +17,10 @@
 
 ### Requirements
 
-- PHP 8.1+
+- PHP 8.2+
 - Composer
 - MySQL
-- MongoDB
+- MongoDB (PHP 확장 2.1+)
 
 ### Steps
 
