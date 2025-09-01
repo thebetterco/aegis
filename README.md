@@ -21,6 +21,8 @@
 - Composer
 - MySQL
 - MongoDB (PHP 확장 2.1+)
+- Nginx
+- PHP-FPM (PHP 8.2)
 
 ### Steps
 
@@ -45,3 +47,45 @@
    ```bash
    php artisan serve
    ```
+
+## Nginx + PHP-FPM Setup
+
+For production or serving through a web server, configure Nginx to use PHP-FPM.
+
+### Prerequisites
+
+- Nginx
+- PHP-FPM (matching the PHP version, e.g., `php8.2-fpm`)
+
+### Example Nginx configuration
+
+```
+server {
+    listen 80;
+    server_name example.com;
+    root /path/to/aegis/public;
+
+    index index.php index.html;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+```
+
+After saving the configuration, restart the services:
+
+```bash
+sudo systemctl restart nginx php8.2-fpm
+```
+
+Ensure the `storage` and `bootstrap/cache` directories are writable by the web server user.
