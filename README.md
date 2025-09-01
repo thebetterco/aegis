@@ -37,11 +37,18 @@
    cp .env.example .env
    php artisan key:generate
    ```
+
+   앱 키가 올바르지 않으면 `"Unsupported cipher or incorrect key length. Supported ciphers are: aes-128-cbc, aes-256-cbc, aes-128-gcm, aes-256-gcm"` 오류가 발생할 수 있습니다.
+   기본 암호화 알고리즘은 `AES-256-CBC`이며 32바이트 키가 필요합니다.
+   다른 알고리즘을 사용할 경우 `config/app.php`의 `cipher` 값을 수정하고,
+   `.env`의 `APP_KEY`에 16바이트(128bit) 또는 32바이트(256bit) 키를 Base64로 인코딩하여 저장하세요.
+   `php artisan key:generate` 명령은 올바른 길이의 키를 자동으로 생성해 줍니다.
+
 3. Fill in `.env` with your MySQL, MongoDB, and OAuth credentials for Naver Chzzk, YouTube, and Naver Commerce.
 4. Run database migrations and link the storage directory:
-   ```bash
-   php artisan migrate
-   php artisan storage:link
+    ```bash
+    php artisan migrate
+    php artisan storage:link
    ```
 5. Start the development server:
    ```bash
