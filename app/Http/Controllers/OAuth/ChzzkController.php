@@ -36,18 +36,56 @@ class ChzzkController extends Controller
         }
 
         $code = $request->query('code');
-        $tokenResponse = Http::asForm()->post(config('services.chzzk.token_url'), [
+		$state = $request->query('state');
+		$tokenParams = [
             'grantType' => 'authorization_code',
             'clientId' => config('services.chzzk.client_id'),
             'clientSecret' => config('services.chzzk.client_secret'),
             'code' => $code,
-            'redirectUri' => route('oauth.chzzk.callback'),
-        ]);
-        $tokens = $tokenResponse->json();
+			'state' => $state,
+            //'redirectUri' => route('oauth.chzzk.callback'),
+		];
+		//print_r($tokenParams);
+        $tokenResponse = Http::withHeaders(
+				[
+					'headers' => [
+						'Client-Id' => config('services.chzzk.client_id'),
+						'Client-Secret' => config('services.chzzk.client_secret'),
+						'response-type' => 'application/json',
+					]
+				]
+			)->post(
+				config('services.chzzk.token_url'), 
+				$tokenParams
+			);
+        $tokenResponse = $tokenResponse->json();
+		//print_r($tokenResponse);
+		$tokens = $tokenResponse['content'];
+		/*
+		$cid = config('services.chzzk.client_id');
+		$cs = config('services.chzzk.client_secret');
+
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+			'Client-Id: '.$cid,
+			'Client-Secret: '.$cs,
+			'Content-type: application/json',
+		]);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($tokenParams));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_URL, config('services.chzzk.token_url'));
+		$ret = curl_exec($ch);
+
+		var_dump($ret);
+		print_r(curl_getinfo($ch));
+		*/
 
         $profile = Http::withToken($tokens['accessToken'])
-            ->get(config('services.chzzk.api_url').'/users/me')
-            ->json();
+            ->get(config('services.chzzk.api_url').'/open/v1/users/me')
+            ->json()['content'];
+		print_r($profile);
 
         $user = User::firstOrCreate(
             ['chzzk_id' => $profile['id']],
