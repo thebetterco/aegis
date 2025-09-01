@@ -57,6 +57,33 @@ For production or serving through a web server, configure Nginx to use PHP-FPM.
 - Nginx
 - PHP-FPM (matching the PHP version, e.g., `php8.2-fpm`)
 
+### Front controller
+
+The application entry point is `public/index.php`:
+
+```php
+<?php
+
+use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Http\Request;
+
+define('LARAVEL_START', microtime(true));
+
+require __DIR__.'/../vendor/autoload.php';
+
+$app = require_once __DIR__.'/../bootstrap/app.php';
+
+$kernel = $app->make(Kernel::class);
+
+$response = $kernel->handle(
+    $request = Request::capture()
+);
+
+$response->send();
+
+$kernel->terminate($request, $response);
+```
+
 ### Example Nginx configuration
 
 ```
