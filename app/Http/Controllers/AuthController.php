@@ -19,7 +19,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
+        $credentials = $this->validate($request, [
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
@@ -46,7 +46,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $validated = $request->validate([
+        $validated = $this->validate($request, [
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'confirmed'],
         ]);
