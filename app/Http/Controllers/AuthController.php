@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -19,7 +18,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
+        $credentials = $this->validate($request, [
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
@@ -46,7 +45,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $validated = $request->validate([
+        $validated = $this->validate($request, [
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'confirmed'],
         ]);
