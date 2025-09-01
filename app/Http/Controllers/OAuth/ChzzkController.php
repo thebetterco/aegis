@@ -44,7 +44,7 @@ class ChzzkController extends Controller
         ]);
         $tokens = $tokenResponse->json();
 
-        $profile = Http::withToken($tokens['access_token'])
+        $profile = Http::withToken($tokens['accessToken'])
             ->get(config('services.chzzk.api_url').'/users/me')
             ->json();
 
@@ -52,9 +52,9 @@ class ChzzkController extends Controller
             ['chzzk_id' => $profile['id']],
             ['email' => $profile['email'] ?? null]
         );
-        $user->chzzk_channel_name = $profile['channel_name'] ?? null;
-        $user->chzzk_access_token = $tokens['access_token'];
-        $user->chzzk_refresh_token = $tokens['refresh_token'];
+        $user->chzzk_channel_name = $profile['channelName'] ?? null;
+        $user->chzzk_access_token = $tokens['accessToken'];
+        $user->chzzk_refresh_token = $tokens['refreshToken'] ?? null;
         $user->save();
 
         Auth::login($user);
