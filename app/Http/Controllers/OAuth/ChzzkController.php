@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -50,7 +51,10 @@ class ChzzkController extends Controller
 
         $user = User::firstOrCreate(
             ['chzzk_id' => $profile['id']],
-            ['email' => $profile['email'] ?? null]
+            [
+                'email' => $profile['email'] ?? null,
+                'password' => Hash::make(Str::random(32)),
+            ]
         );
         $user->chzzk_channel_name = $profile['channelName'] ?? null;
         $user->chzzk_access_token = $tokens['accessToken'];
