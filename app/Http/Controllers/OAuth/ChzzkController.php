@@ -2,34 +2,45 @@
 
 namespace App\Http\Controllers\OAuth;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class ChzzkController extends Controller
 {
     public function redirect()
     {
+        $state = Str::random(40);
+        Session::put('chzzkOauthState', $state);
+
         $query = http_build_query([
-            'response_type' => 'code',
-            'client_id' => config('services.chzzk.client_id'),
-            'redirect_uri' => route('oauth.chzzk.callback'),
+            'responseType' => 'code',
+            'clientId' => config('services.chzzk.client_id'),
+            'redirectUri' => route('oauth.chzzk.callback'),
             'scope' => 'profile channel:read channel:chat',
+            'state' => $state,
         ]);
+
         return redirect(config('services.chzzk.auth_url').'?'.$query);
     }
 
     public function callback(Request $request)
     {
+        if ($request->query('state') !== Session::pull('chzzkOauthState')) {
+            abort(403, 'Invalid OAuth state');
+        }
+
         $code = $request->query('code');
         $tokenResponse = Http::asForm()->post(config('services.chzzk.token_url'), [
-            'grant_type' => 'authorization_code',
-            'client_id' => config('services.chzzk.client_id'),
-            'client_secret' => config('services.chzzk.client_secret'),
+            'grantType' => 'authorization_code',
+            'clientId' => config('services.chzzk.client_id'),
+            'clientSecret' => config('services.chzzk.client_secret'),
             'code' => $code,
-            'redirect_uri' => route('oauth.chzzk.callback'),
+            'redirectUri' => route('oauth.chzzk.callback'),
         ]);
         $tokens = $tokenResponse->json();
 
@@ -47,6 +58,7 @@ class ChzzkController extends Controller
         $user->save();
 
         Auth::login($user);
+
         return redirect('/');
     }
 }
