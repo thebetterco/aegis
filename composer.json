@@ -4,10 +4,11 @@
   "description": "Streaming management and chat moderation app",
   "require": {
     "php": "^8.2",
+    "guzzlehttp/guzzle": "^7.10",
     "laravel/framework": "^10.0",
-    "mongodb/mongodb": "^2.1",
     "laravel/sanctum": "^3.2",
-    "laravel/tinker": "^2.8"
+    "laravel/tinker": "^2.8",
+    "mongodb/mongodb": "^2.1"
   },
   "require-dev": {
     "fakerphp/faker": "^1.9.1",
