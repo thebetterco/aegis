@@ -88,7 +88,7 @@ class ChzzkController extends Controller
 		print_r($profile);
 
         $user = User::firstOrCreate(
-            ['chzzk_id' => $profile['id']],
+            ['chzzk_id' => $profile['channelId']],
             [
                 'email' => $profile['email'] ?? Str::uuid().'@example.com',
                 'password' => Hash::make(Str::random(32)),
